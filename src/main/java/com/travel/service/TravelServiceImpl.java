@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.travel.dao.TravelDao;
 import com.travel.dto.TravelDTO;
 import com.travel.vo.ClientInfoVo;
+import com.travel.vo.TraveInfoVo;
 
 @Service
 public class TravelServiceImpl implements TravelService{
@@ -40,6 +41,11 @@ public class TravelServiceImpl implements TravelService{
 	public int registerSchedule(TravelDTO travelDTO) {
 		return travelDao.registerSchedule(travelDTO);
 		
+	}
+
+	@Override
+	public List<TraveInfoVo> getSchedule(String clientSeq) {
+		return travelDao.getSchedule(clientSeq);
 	}
 
 }

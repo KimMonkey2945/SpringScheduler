@@ -14,7 +14,7 @@ public class TraveInfoVo {
 	private String traveDay;
 	private String traveTime;
 	private String traveCity;
-	private String taveCounty;
+	private String traveCounty;
 	private String traveLoc;
 	private String traveTrans;
 	private String transTime;

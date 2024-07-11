@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.travel.dto.TravelDTO;
 import com.travel.service.TravelService;
 import com.travel.vo.ClientInfoVo;
+import com.travel.vo.TraveInfoVo;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -96,15 +97,21 @@ public class TravelController {
 	
 	@PostMapping("/registerList.do")
 	@ResponseBody
-	public Map<String, String> getPeriod(@RequestParam("userName") String userName,  Model model) {
-		Map<String, String> response = new HashMap<String, String>();
+	public Map<Object, Object> getPeriod(@RequestParam("userName") String userName,  Model model) {
+		Map<Object, Object> response = new HashMap<Object, Object>();
 		
 		ClientInfoVo result = travelService.getName(userName);
 		String resultPeriod = result.getPeriod();
 		String resultUserName = result.getUserName();
+		String resultClientSeq = result.getSeq();
+		
+		List<TraveInfoVo> taravelInfo = travelService.getSchedule(resultClientSeq);
+		
 		
 		response.put("resultPeriod", resultPeriod);
 		response.put("resultUserName", resultUserName);
+		response.put("resultClientSeq", resultClientSeq);
+		response.put("taravelInfo", taravelInfo);
 		
 		return response;
 	}
@@ -113,6 +120,10 @@ public class TravelController {
 	@ResponseBody
 	public Map<String, String> registerSchedule(@RequestBody TravelDTO travelDTO) {
 		Map<String, String> response = new HashMap<String, String>();
+		
+		logger.info("getClientInfoVo" + travelDTO.getClientInfoVo().toString());
+		logger.info("getTraveInfoVo" + travelDTO.getTraveInfoVo().toString());
+		
 		
 		travelService.registerSchedule(travelDTO);
 		

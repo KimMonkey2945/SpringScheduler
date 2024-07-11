@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.travel.dao.TravelDao;
 import com.travel.dto.TravelDTO;
 import com.travel.vo.ClientInfoVo;
+import com.travel.vo.TraveInfoVo;
 
 @Repository
 public class TravelDaoImpl implements TravelDao{
@@ -41,9 +42,18 @@ public class TravelDaoImpl implements TravelDao{
 	public int registerSchedule(TravelDTO travelDTO) {
 		int result = 0;
 		
+		// 견적경비용
+//		sqlSession.insert("travel.insertClient", travelDTO);
+		
+		sqlSession.insert("travel.insertSchedule", travelDTO);
 		
 		
 		return result;
+	}
+
+	@Override
+	public List<TraveInfoVo> getSchedule(String clientSeq) {
+		return sqlSession.selectList("travel.selectSchedule",clientSeq);
 	}
 	
 }

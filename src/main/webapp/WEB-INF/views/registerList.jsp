@@ -11,6 +11,20 @@
 	
 $(function() {
 	
+	  var period = '';
+	  var schedules = []; // 일별데이터 저장
+	  var currentDay = null;
+	  var userResultName = '';
+	  var resultClientSeq = '';
+	  var day = '';
+	  
+	  var submitData ={
+		  clientInfoVo: {},
+		  traveInfoVo: []	  
+	  };
+	  
+	  
+	
 	jQuery.fn.serializeObject = function() {
 	    var obj = null;
 	    try {
@@ -72,22 +86,24 @@ $(function() {
 	  }
 
 	  // 시/도 및 구/군 선택 박스 초기화
-	  initCitySelect($('#taveCity'));
+	  initCitySelect($('#traveCity'));
 
-	  $(document).on('change', '.taveCity', function() {
-	    var $countySelect = $(this).closest('tr').find('.taveCounty');
+	  $(document).on('change', '.traveCity', function() {
+	    var $countySelect = $(this).closest('tr').find('.traveCounty');
 	    initCountySelect($(this), $countySelect);
 	  });
 
 	  $(document).on('click', '#addSchedule', function() {
 		    var str = "";
 		    str += "<tr class='enterSchedule'>";
+			str +=  "<input type='hidden' id='traveDay' class='traveDay' value=' "+ day +"'/> "
+			str +=  "<input type='hidden' id='seq' class='seq' value=' "+ resultClientSeq +"'/> "
 		    str += 	"<td><input type='checkbox' class='scheduleCheck'/></td>";
 		    str += 	"<td><input id='traveTime' class='traveTime' type='time'/></td>";
 		    str += 	"<td>";
-		    str += 	"<select id='taveCity' class='taveCity' name='taveCity'>";
+		    str += 	"<select id='traveCity' class='traveCity' name='traveCity'>";
 		    str += 	"</select>";
-		    str += 	"<select id='taveCounty' class='taveCounty' name='taveCounty'>";
+		    str += 	"<select id='traveCounty' class='traveCounty' name='traveCounty'>";
 		    str += 	"</select>";
 		    str +=	 "</td>";
 		    str += 	"<td><input id='traveLoc' class='traveLoc'/></td>";
@@ -111,7 +127,7 @@ $(function() {
 
 	    // 새로 추가된 요소에 대해 시/도 및 구/군 선택 박스 초기화
 	    var $addedRow = $('#traveInfo').find('tr:last');
-	    initCitySelect($addedRow.find('.taveCity'));
+	    initCitySelect($addedRow.find('.traveCity'));
 	  });
 
 	  $(document).on('click', '#deleteSchedule', function() {
@@ -119,18 +135,6 @@ $(function() {
 	      $(this).closest('tr').remove();
 	    });
 	  });
-	  
-	  var period = '';
-	  var schedules = {}; // 일별데이터 저장
-	  var currentDay = null;
-	  var userResultName = '';
-	  
-	  var submitData ={
-		  clientInfoVo: {},
-		  traveInfoVo: []	  
-	  };
-	  
-	  
 	  
 	  // 이름에 따라 여행기간 버튼 
 	  $(document).on('click', '#userName', function(){
@@ -146,8 +150,10 @@ $(function() {
 // 			    	console.log('resultPeriod : ', response.resultPeriod);
 			    	period = response.resultPeriod;
 			    	userResultName = response.resultUserName;
+			    	resultClientSeq = response.resultClientSeq;
 			    	console.log('period : ', period);
 			    	console.log('userName : ', userName);
+			    	console.log('resultClientSeq : ', resultClientSeq);
 			    	 var str = "";
 					 for(var i = 1; i <= period; i++){
 						 console.log('i : ', i);
@@ -172,7 +178,7 @@ $(function() {
 	  });
 	  
 	  $(document).on('click','#page .date' ,function(){
-		  var day = $(this).val();
+		  day = $(this).val();
 		  
 		  // 시/도 및 구/군 선택 박스 초기화
 		  initCitySelect($('#taveCity'));
@@ -190,7 +196,6 @@ $(function() {
 		 console.log('selectDay : ', day);
 		 
 		 var str = '';
-		 str +=  "<input type='hidden' class='traveDay' value=' "+ day +"'/> "
 		 str +=	 "<table style='margin-top:20px;' id='traveInfo' align='center' border='1'>"
 		 str +=				"<tr>"
 		 str +=				"<td></td>"
@@ -204,12 +209,14 @@ $(function() {
 		 str +=				"<td>교통비</td>"
 		 str +=			"</tr>"
 		 str +=			"<tr class='enterSchedule'>"
+		 str +=  "<input type='hidden' id='traveDay' class='traveDay' value=' "+ day +"'/> "
+		 str +=  "<input type='hidden' id='seq' class='seq' value=' "+ resultClientSeq +"'/> "
 		 str +=				"<td><input type='checkbox' class='scheduleCheck' /></td>"
 		 str +=				"<td><input id='traveTime' class='traveTime' type='time'/></td>"
 		 str +=				"<td>"
-		 str +=					"<select id='taveCity' class='taveCity' name='taveCity' value=''>"
+		 str +=					"<select id='traveCity' class='traveCity' name='traveCity' value=''>"
 		 str +=					"</select>"
-		 str +=					"<select id='taveCounty' class='taveCounty' name='taveCounty' value=''>"
+		 str +=					"<select id='traveCounty' class='traveCounty' name='traveCounty' value=''>"
 		 str +=					"</select>"
 		 str +=				"</td>"
 		 str +=				"<td><input id='traveLoc' class='traveLoc'/></td>"
@@ -236,7 +243,7 @@ $(function() {
 	    
 	    // 새로 추가된 요소에 대해 시/도 및 구/군 선택 박스 초기화
 	    var $addedRow = $('#traveInfo').find('tr:last');
-	    initCitySelect($addedRow.find('.taveCity'));
+	    initCitySelect($addedRow.find('.traveCity'));
 	    
 // 	 	// 이전에 저장된 데이터 로드
 // 	    if (schedules[day]) {
@@ -245,7 +252,7 @@ $(function() {
 		  
 	  });
 	  
-/* 	  function saveCurrentData(){
+	/*  function saveCurrentData(){
 		  var day = currentDay;
 		 
 		  if(day != null){
@@ -307,6 +314,25 @@ $(function() {
 		  
 		  console.log('data : ', submitData);
 		  
+		  $.ajax({
+				url : "/registerSchedule.do",
+			    type: "POST",
+			    contentType: "application/json",
+			    data : JSON.stringify(submitData),
+			    success: function(response, textStatus, jqXHR)
+			    {
+			    	alert('임시저장');
+					
+			    },
+			    error: function (xhr, textStatus, error)
+			    {
+			    	alert("실패");
+			    	console.log("textStatus : ", textStatus);
+			    	console.log("error : ", error);
+			    }	
+			
+			});
+		  
 	  });
 	  
 	});
@@ -362,10 +388,10 @@ $(function() {
 				<td><input type="checkbox" class="scheduleCheck" /></td>
 				<td><input id="traveTime" class="traveTime" type="time"/></td>
 				<td>
-					<select id="taveCity" class="taveCity" name="taveCity" value="">
+					<select id="traveCity" class="traveCity" name="traveCity" value="">
 					</select>
 					
-					<select id="taveCounty" class="taveCounty" name="taveCounty" value="">
+					<select id="traveCounty" class="traveCounty" name="traveCounty" value="">
 					</select>
 				</td>
 				<td><input id="traveLoc" class="traveLoc"/></td>

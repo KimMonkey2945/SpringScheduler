@@ -18,7 +18,7 @@
 			<result property="traveDay" column="TRAVE_DAY"/>
 			<result property="traveTime" column="TRAVE_TIME"/>
 			<result property="traveCity" column="TRAVE_CITY"/>
-			<result property="taveCounty" column="TRAVE_COUNTY"/>
+			<result property="traveCounty" column="TRAVE_COUNTY"/>
 			<result property="traveLoc" column="TRAVE_LOC"/>
 			<result property="traveTrans" column="TRAVE_TRANS"/>
 			<result property="transTime" column="TRANS_TIME"/>
@@ -74,6 +74,55 @@
 		SELECT *
 		FROM CLIENT_INFO
 		WHERE USER_NAME = #{userName}
+	
+	</select>
+	
+<!-- 	<insert id="insertClient">
+	</insert> -->
+	
+	<insert id="insertSchedule">
+	
+		<foreach collection="traveInfoVo" item="trave" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
+	       
+	        INSERT INTO TRAVE_INFO 
+		        (TRAVE_SEQ
+		        , SEQ
+		        , TRAVE_DAY
+		        , TRAVE_TIME
+		        , TRAVE_CITY
+		        , TRAVE_COUNTY
+		        , TRAVE_LOC
+		        , TRAVE_TRANS
+		        , TRANS_TIME
+		        , USE_TIME
+		        , USE_EXPEND
+		        , TRAVE_DETAIL
+		        , REQUEST)
+		        SELECT
+		        TRAVE_SEQ.NEXTVAL
+		        , #{trave.seq}
+		        , #{trave.traveDay}
+		        , #{trave.traveTime}
+		        , #{trave.traveCity}
+		        , #{trave.traveCounty}
+		        , #{trave.traveLoc}
+		        , #{trave.traveTrans}
+		        , #{trave.transTime}
+		        <!--usetime 임시  -->
+		        , '임시'
+		        , #{trave.useExpend}
+		        , #{trave.traveDetail}
+		        , #{trave.request}
+				FROM DUAL
+		</foreach>
+	
+	</insert>
+	
+	<select id="selectSchedule" resultMap="traveInfoVo">
+	
+		SELECT * 
+		FROM TRAVE_INFO
+		WHERE SEQ = #{clientSeq}
 	
 	</select>
 	
